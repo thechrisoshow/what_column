@@ -3,19 +3,19 @@ require 'test_helper'
 class WhatColumnTest < ActiveSupport::TestCase
 
   def open_file(name)
-    File.open(File.join(RAILS_ROOT_FOR_PLUGIN, "app", "models", name))
+    File.open(File.join(RAILS_ROOT, "app", "models", name))
   end
 
   context "before columnization" do
-    should "not have name column detailed if not columnized" do
+    should "not have name column detailed if not add_column_details_to_modelsd" do
       assert_no_match(/# name:\sstring/, open_file("user.rb").read)
     end    
   end
-  
+
   context "decolumnizing" do
     setup do
-      WhatColumnizer.columnize
-      WhatColumnizer.decolumnize
+      WhatColumn::Columnizer.add_column_details_to_models
+      WhatColumn::Columnizer.remove_column_details_from_models
       @file = open_file("user.rb")
     end
 
@@ -24,7 +24,7 @@ class WhatColumnTest < ActiveSupport::TestCase
     end
 
     should "not display footer" do
-      assert_no_match(/#{WhatColumnizer::FOOTER}/, @file.read)      
+      assert_no_match(/#{WhatColumn::Columnizer::FOOTER}/, @file.read)      
     end
 
     should "not remove class information" do
@@ -39,12 +39,14 @@ class WhatColumnTest < ActiveSupport::TestCase
   context "columnizing a standard model" do
     setup do
       @file = open_file("user.rb")
-      WhatColumnizer.columnize
+      WhatColumn::Columnizer.add_column_details_to_models
     end
     
     teardown do
-      WhatColumnizer.decolumnize
+      WhatColumn::Columnizer.remove_column_details_from_models
     end
+  
+
 
     should "have age column detailed" do
       assert_match(/age:\sinteger/, @file.read)
@@ -59,35 +61,36 @@ class WhatColumnTest < ActiveSupport::TestCase
     end
     
     should "add column details at the top" do
-      assert_match(/#{WhatColumnizer::FOOTER}.*class/, @file.read.delete("\n"))
+      assert_match(/#{WhatColumn::Columnizer::FOOTER}.*class/, @file.read.delete("\n"))
     end
     
     should "add header to comments" do
-      assert_match(/#{WhatColumnizer::HEADER}/, @file.read)
+      assert_match(/#{WhatColumn::Columnizer::HEADER}/, @file.read)
     end
     
     should "add footer to comments" do
-      assert_match(/#{WhatColumnizer::FOOTER}/, @file.read)
+      assert_match(/#{WhatColumn::Columnizer::FOOTER}/, @file.read)
     end
     
     should "only have the one columnization if columnizing twice" do
-      WhatColumnizer.columnize
-      assert_no_match(/#{WhatColumnizer::FOOTER}.*#{WhatColumnizer::FOOTER}/, @file.read.delete("\n"))
+      WhatColumn::Columnizer.add_column_details_to_models
+      assert_no_match(/#{WhatColumn::Columnizer::FOOTER}.*#{WhatColumn::Columnizer::FOOTER}/, @file.read.delete("\n"))
     end
     
     should_eventually "justify the columns" do
       assert_match(/age:        integer/, @file.read)
     end
+
   end
-  
+
   context "columnizing a model in a subfolder" do
     setup do
       @file = open_file("shop/product.rb")
-      WhatColumnizer.columnize
+      WhatColumn::Columnizer.add_column_details_to_models
     end
     
     teardown do
-      WhatColumnizer.decolumnize
+      WhatColumn::Columnizer.remove_column_details_from_models
     end
 
     should "have price column detailed" do
@@ -102,11 +105,11 @@ class WhatColumnTest < ActiveSupport::TestCase
   context "columnizing a file in a subfolder" do
     setup do
       @file = open_file("shop/product.rb")
-      WhatColumnizer.columnize
+      WhatColumn::Columnizer.add_column_details_to_models
     end
     
     teardown do
-      WhatColumnizer.decolumnize
+      WhatColumn::Columnizer.remove_column_details_from_models
     end
 
     should "have price column detailed" do
@@ -122,7 +125,7 @@ class WhatColumnTest < ActiveSupport::TestCase
   context "columnizing an inherited model" do
     setup do
       @file = open_file("admin_user.rb")
-      WhatColumnizer.columnize
+      WhatColumn::Columnizer.add_column_details_to_models
     end
 
     should "have name column detailed" do
@@ -133,22 +136,22 @@ class WhatColumnTest < ActiveSupport::TestCase
   context "columnizing a module" do
     setup do
       @file = open_file("user_methods.rb")
-      WhatColumnizer.columnize      
+      WhatColumn::Columnizer.add_column_details_to_models      
     end
 
     should "not have any what column stuff" do
-      assert_no_match(/#{WhatColumnizer::FOOTER}/, @file.read)
+      assert_no_match(/#{WhatColumn::Columnizer::FOOTER}/, @file.read)
     end
   end
 
   context "columnizing a class that's not an activerecord model" do
     setup do
       @file = open_file("authorizer.rb")
-      WhatColumnizer.columnize      
+      WhatColumn::Columnizer.add_column_details_to_models      
     end
 
     should "not have any what column stuff" do
-      assert_no_match(/#{WhatColumnizer::FOOTER}/, @file.read)
+      assert_no_match(/#{WhatColumn::Columnizer::FOOTER}/, @file.read)
     end
   end    
 end
