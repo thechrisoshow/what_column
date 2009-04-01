@@ -1,3 +1,4 @@
+=begin
 class WhatColumnizer
 
   HEADER = "=== List of columns ==="
@@ -68,3 +69,4 @@ class WhatColumnizer
   end
 
 end
+=end
