@@ -1,25 +1,25 @@
-class WhatColumnizer
+class WhatColumn
 
   HEADER = "=== List of columns ==="
   FOOTER = "======================="
 
-  def self.columnize
-    decolumnize
-    Dir[File.join(File.dirname(__FILE__), '..', 'app', 'models', '**', '*')].each do |dir|
+  def self.add_column_details_to_models
+    remove_column_details_from_models    
+    Dir[File.join(RAILS_ROOT, 'app', 'models', '**', '*')].each do |dir|
       next if File.directory?(dir)
-      columnize_file(dir)
+      add_column_details_to_file(dir)
     end
   end
 
-  def self.decolumnize
-    Dir[File.join(File.dirname(__FILE__), '..', 'app', 'models', '**', '*')].each do |dir|
+  def self.remove_column_details_from_models
+    Dir[File.join(RAILS_ROOT, 'app', 'models', '**', '*')].each do |dir|
       next if File.directory?(dir)      
-      decolumnize_file(dir)
+      remove_column_details_from_file(dir)
     end
   end
 
   private
-  def self.columnize_file(filepath)
+  def self.add_column_details_to_file(filepath)
     File.open(filepath, "r+") do |file|
       if file.read.match(/class (.*)\</)
         ar_class = $1.strip.constantize
@@ -43,7 +43,7 @@ class WhatColumnizer
     end
   end
 
-  def self.decolumnize_file(filepath)
+  def self.remove_column_details_from_file(filepath)
     File.open(filepath, 'r+') do |file|
       lines = file.readlines
       removing_what_columns = false
