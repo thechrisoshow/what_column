@@ -2,8 +2,16 @@ require 'test_helper'
 
 class WhatColumnTest < ActiveSupport::TestCase
 
+  context "works?" do
+    should "work" do
+      assert false
+    end
+  end
+
+=begin
   def open_file(name)
-    File.open(File.join(RAILS_ROOT, "app", "models", name))
+    new_rails_root = "#{File.dirname(__FILE__)}/rails_root"
+    File.open(File.join(new_rails_root, "app", "models", name))
   end
 
   context "before columnization" do
@@ -151,4 +159,5 @@ class WhatColumnTest < ActiveSupport::TestCase
       assert_no_match(/#{WhatColumnizer::FOOTER}/, @file.read)
     end
   end    
+=end
 end
