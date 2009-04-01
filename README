@@ -1,13 +1,24 @@
-WhatColumn
+What Column
 ==========
 
-Introduction goes here.
+Tired of having to look at the schema.rb to figure out what columns belong to a model?  
+Well no more!
+
+With what_column a little comment appears at the top of your models displaying the column details!
+
+Just simply run the rake command: rake what_column:add - and this is what gets generated:
+
+# === List of columns ===
+#   id: integer
+#   name: string
+#   created_at: datetime
+#   updated_at: datetime
+# =======================
+class User < ActiveRecord::Base
+end
 
 
-Example
-=======
-
-Example goes here.
+Turn it off with rake what_column:remove.
 
 
 Copyright (c) 2009 Chris O'Sullivan, released under the MIT license
