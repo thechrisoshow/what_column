@@ -6,8 +6,17 @@ Well no more!
 
 With what_column a little comment appears at the top of your models displaying the column details!
 
-Just simply run the rake command: rake what_column:add - and this is what gets generated:
+INSTALLATION
+==========
+Go into your Rails folder and type:
+script/plugin install git://github.com/thechrisoshow/what_column.git
 
+USAGE
+==========
+Run the rake command: 
+  rake what_column:add
+
+And you will see this comment block get plonked onto all your models:
 # === List of columns ===
 #   id: integer
 #   name: string
@@ -18,7 +27,7 @@ class User < ActiveRecord::Base
 end
 
 
-Turn it off with rake what_column:remove.
+Turn it off with rake what_column:remove
 
 
 Copyright (c) 2009 Chris O'Sullivan, released under the MIT license
