@@ -58,8 +58,8 @@ class WhatColumnTest < ActiveSupport::TestCase
       assert_match(/def name_and_age/, @file.read)      
     end
     
-    should "add column details at the top" do
-      assert_match(/#{WhatColumn::Columnizer::FOOTER}.*class/, @file.read.delete("\n"))
+    should "add column details at the top of class" do
+      assert_match(/class.*#{WhatColumn::Columnizer::HEADER}.*/, @file.read.delete("\n"))
     end
     
     should "add header to comments" do
