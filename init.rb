@@ -1,1 +1,5 @@
-require 'what_column'
+module ::ActiveRecord
+  class << Migrator
+    include WhatColumnMigrator
+  end
+end

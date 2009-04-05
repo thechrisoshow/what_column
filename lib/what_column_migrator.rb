@@ -1,15 +1,17 @@
-module WhatColumnMigrator
+module WhatColumnMigrator #:nodoc:
   
   def self.included(base)
     base.class_eval do
-      alias_method_chain :migrate, :columnizer
+      if !base.method_defined?(:migrate_without_columnizer)
+        alias_method_chain :migrate, :columnizer
+      end
     end
   end
 
-  def migrate_with_columnizer
-    puts "columns"
-    migrate_without_columnizer
-    WhatColumn::Columnizer.add_column_details_to_models
+  def migrate_with_columnizer(*args)
+    result_of_migrations = migrate_without_columnizer(*args)
+    WhatColumn::Columnizer.add_column_details_to_models if RAILS_ENV == 'development'
+    result_of_migrations
   end
 
 end
