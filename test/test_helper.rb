@@ -3,16 +3,12 @@ $:.unshift(File.dirname(__FILE__) + '/../lib')
 require 'what_column'
 require 'what_column_migrator'
 
-
-
 # Load the environment
 ENV['RAILS_ENV'] ||= 'test'
 
 rails_root = File.dirname(__FILE__) + '/rails_root'
 
 require "#{rails_root}/config/environment.rb"
-
-require "#{File.dirname(__FILE__)}/../init"
 
 
 # Load the testing framework
