@@ -8,7 +8,7 @@ class WhatColumnTest < ActiveSupport::TestCase
 
   context "before columnization" do
     should "not have name column detailed if not add_column_details_to_modelsd" do
-      assert_no_match(/# name:\sstring/, open_file("user.rb").read)
+      assert_no_match(/# name\s+: string/, open_file("user.rb").read)
     end    
   end
 
@@ -20,7 +20,7 @@ class WhatColumnTest < ActiveSupport::TestCase
     end
 
     should "not display column details" do
-      assert_no_match(/name:\sstring/, @file.read)      
+      assert_no_match(/name\s+: string/, @file.read)      
     end
 
     should "not display footer" do
@@ -45,15 +45,13 @@ class WhatColumnTest < ActiveSupport::TestCase
     teardown do
       WhatColumn::Columnizer.remove_column_details_from_models
     end
-  
-
 
     should "have age column detailed" do
-      assert_match(/age:\sinteger/, @file.read)
+      assert_match(/age\s+: integer/, @file.read)
     end
 
     should "have name column detailed" do
-      assert_match(/name:\sstring/, @file.read)
+      assert_match(/name\s+: string/, @file.read)
     end
     
     should "not write over code alredy in class" do      
@@ -77,8 +75,8 @@ class WhatColumnTest < ActiveSupport::TestCase
       assert_no_match(/#{WhatColumn::Columnizer::FOOTER}.*#{WhatColumn::Columnizer::FOOTER}/, @file.read.delete("\n"))
     end
     
-    should_eventually "justify the columns" do
-      assert_match(/age:        integer/, @file.read)
+    should "justify the columns" do
+      assert_match(/age        : integer/, @file.read)
     end
 
   end
@@ -94,11 +92,11 @@ class WhatColumnTest < ActiveSupport::TestCase
     end
 
     should "have price column detailed" do
-      assert_match(/price:\sfloat/, @file.read)
+      assert_match(/price\s+: float/, @file.read)
     end
 
     should "have integer column detailed" do
-      assert_match(/quantity:\sinteger/, @file.read)
+      assert_match(/quantity\s+: integer/, @file.read)
     end    
   end
   
@@ -113,11 +111,11 @@ class WhatColumnTest < ActiveSupport::TestCase
     end
 
     should "have price column detailed" do
-      assert_match(/price:\sfloat/, @file.read)
+      assert_match(/price\s+: float/, @file.read)
     end
 
     should "have integer column detailed" do
-      assert_match(/quantity:\sinteger/, @file.read)
+      assert_match(/quantity\s+: integer/, @file.read)
     end    
   end
 
@@ -129,7 +127,7 @@ class WhatColumnTest < ActiveSupport::TestCase
     end
 
     should "have name column detailed" do
-      assert_match(/name:\sstring/, @file.read)
+      assert_match(/name\s+: string/, @file.read)
     end
   end
   

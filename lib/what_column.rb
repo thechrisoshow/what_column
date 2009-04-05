@@ -27,11 +27,16 @@ module WhatColumn
 
           if ar_class.respond_to?(:columns)
 
+            max_width = ar_class.columns.map {|c| c.name.length + 1}.max
+            # the format string is used to line up the column types correctly
+            format_string = "#   %-#{max_width}s: %s \n"
+            
             file.rewind
             lines = file.readlines
             lines.unshift "# " + FOOTER + "\n"
             ar_class.columns.reverse.each do |column|
-              lines.unshift "#   #{column.name}: #{column.type.to_s}" + "\n"        
+              values = [column.name, column.type.to_s]
+              lines.unshift format_string % values
             end
 
             lines.unshift "# " + HEADER + "\n"
