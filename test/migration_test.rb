@@ -10,12 +10,12 @@ class MigrationTest < ActiveSupport::TestCase
     
     should "run columnize after migrations if RAILS_ENV == 'development'" do
       WhatColumnMigrator.const_set("RAILS_ENV", 'development')        
-      WhatColumn::Columnizer.expects(:add_column_details_to_models).at_least_once
+      WhatColumn::Columnizer.any_instance.expects(:add_column_details_to_models).at_least_once
       ActiveRecord::Migrator.migrate("#{RAILS_ROOT}/db/migrate")      
     end
         
     should "not run columnize after migrations if RAILS_ENV == 'test'" do
-      WhatColumn::Columnizer.expects(:add_column_details_to_models).never
+      WhatColumn::Columnizer.any_instance.expects(:add_column_details_to_models).never
       ActiveRecord::Migrator.migrate("#{RAILS_ROOT}/db/migrate")
     end
     

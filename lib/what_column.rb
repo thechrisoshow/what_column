@@ -4,7 +4,7 @@ module WhatColumn
     HEADER = "# === List of columns ==="
     FOOTER = "# ======================="
 
-    def self.add_column_details_to_models
+    def add_column_details_to_models
       remove_column_details_from_models    
       Dir[File.join(RAILS_ROOT, 'app', 'models', '**', '*')].each do |dir|
         next if File.directory?(dir)
@@ -12,7 +12,7 @@ module WhatColumn
       end
     end
 
-    def self.remove_column_details_from_models
+    def remove_column_details_from_models
       Dir[File.join(RAILS_ROOT, 'app', 'models', '**', '*')].each do |dir|
         next if File.directory?(dir)      
         remove_column_details_from_file(dir)
@@ -20,7 +20,7 @@ module WhatColumn
     end
 
     private
-    def self.add_column_details_to_file(filepath)
+    def add_column_details_to_file(filepath)
       File.open(filepath, "r+") do |file|
         if file.read.match(/class (.*)\</)
           ar_class = $1.strip.constantize
@@ -57,7 +57,7 @@ module WhatColumn
       end
     end
 
-    def self.remove_column_details_from_file(filepath)
+    def remove_column_details_from_file(filepath)
       File.open(filepath, 'r+') do |file|
         lines = file.readlines
         removing_what_columns = false
@@ -71,7 +71,7 @@ module WhatColumn
 
 
           previous_line = index > 0 ? lines[index - 1] : ""
-          if !removing_what_columns and !(previous_line.match(/^#{FOOTER}$/) and line == "\n")
+          if !should_remove_line(removing_what_columns, line, previous_line)
             out << line
           end
 
@@ -84,6 +84,10 @@ module WhatColumn
         file.puts out
         file.truncate(file.pos)      
       end
+    end
+    
+    def should_remove_line(removing_what_columns, line, previous_line)
+      (removing_what_columns and line.match(/^\s*#/)) or (previous_line.match(/^#{FOOTER}$/) and line == "\n")
     end
 
   end

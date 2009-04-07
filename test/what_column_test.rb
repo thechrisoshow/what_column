@@ -1,6 +1,10 @@
 require 'test_helper'
 
 class WhatColumnTest < ActiveSupport::TestCase
+  
+  def setup
+    @columnizer = WhatColumn::Columnizer.new
+  end
 
   def open_file(name)
     File.open(File.join(RAILS_ROOT, "app", "models", name))
@@ -14,8 +18,8 @@ class WhatColumnTest < ActiveSupport::TestCase
 
   context "decolumnizing" do
     setup do
-      WhatColumn::Columnizer.add_column_details_to_models
-      WhatColumn::Columnizer.remove_column_details_from_models
+      @columnizer.add_column_details_to_models
+      @columnizer.remove_column_details_from_models
       @file = open_file("user.rb")
     end
 
@@ -39,11 +43,11 @@ class WhatColumnTest < ActiveSupport::TestCase
   context "columnizing a standard model" do
     setup do
       @file = open_file("user.rb")
-      WhatColumn::Columnizer.add_column_details_to_models
+      @columnizer.add_column_details_to_models
     end
     
     teardown do
-      WhatColumn::Columnizer.remove_column_details_from_models
+      @columnizer.remove_column_details_from_models
     end
 
     should "have age column detailed" do
@@ -71,7 +75,7 @@ class WhatColumnTest < ActiveSupport::TestCase
     end
     
     should "only have the one columnization if columnizing twice" do
-      WhatColumn::Columnizer.add_column_details_to_models
+      @columnizer.add_column_details_to_models
       assert_no_match(/#{WhatColumn::Columnizer::FOOTER}.*#{WhatColumn::Columnizer::FOOTER}/, @file.read.delete("\n"))
     end
     
@@ -89,11 +93,11 @@ class WhatColumnTest < ActiveSupport::TestCase
   context "columnizing a model in a subfolder" do
     setup do
       @file = open_file("shop/product.rb")
-      WhatColumn::Columnizer.add_column_details_to_models
+      @columnizer.add_column_details_to_models
     end
     
     teardown do
-      WhatColumn::Columnizer.remove_column_details_from_models
+      @columnizer.remove_column_details_from_models
     end
 
     should "have price column detailed" do
@@ -108,11 +112,11 @@ class WhatColumnTest < ActiveSupport::TestCase
   context "columnizing a file in a subfolder" do
     setup do
       @file = open_file("shop/product.rb")
-      WhatColumn::Columnizer.add_column_details_to_models
+      @columnizer.add_column_details_to_models
     end
     
     teardown do
-      WhatColumn::Columnizer.remove_column_details_from_models
+      @columnizer.remove_column_details_from_models
     end
 
     should "have price column detailed" do
@@ -128,7 +132,7 @@ class WhatColumnTest < ActiveSupport::TestCase
   context "columnizing an inherited model" do
     setup do
       @file = open_file("admin_user.rb")
-      WhatColumn::Columnizer.add_column_details_to_models
+      @columnizer.add_column_details_to_models
     end
 
     should "have name column detailed" do
@@ -139,7 +143,7 @@ class WhatColumnTest < ActiveSupport::TestCase
   context "columnizing a module" do
     setup do
       @file = open_file("user_methods.rb")
-      WhatColumn::Columnizer.add_column_details_to_models      
+      @columnizer.add_column_details_to_models      
     end
 
     should "not have any what column stuff" do
@@ -150,7 +154,7 @@ class WhatColumnTest < ActiveSupport::TestCase
   context "columnizing a class that's not an activerecord model" do
     setup do
       @file = open_file("authorizer.rb")
-      WhatColumn::Columnizer.add_column_details_to_models      
+      @columnizer.add_column_details_to_models      
     end
 
     should "not have any what column stuff" do

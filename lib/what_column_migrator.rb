@@ -10,7 +10,7 @@ module WhatColumnMigrator #:nodoc:
 
   def migrate_with_columnizer(*args)
     result_of_migrations = migrate_without_columnizer(*args)
-    WhatColumn::Columnizer.add_column_details_to_models if RAILS_ENV == 'development'
+    WhatColumn::Columnizer.new.add_column_details_to_models if RAILS_ENV == 'development'
     result_of_migrations
   end
 
