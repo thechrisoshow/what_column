@@ -11,7 +11,8 @@ With the what_column plugin a comment appears at the top of your models displayi
 INSTALLATION
 ------------
 Go into your Rails folder and type:
-  script/plugin install git://github.com/thechrisoshow/what_column.git
+
+    script/plugin install git://github.com/thechrisoshow/what_column.git
 
 USAGE
 ------------
@@ -31,9 +32,9 @@ Once what_column is installed everytime you run migrations in development mode y
 
 Should you wish to run the commands manually there are rake commands.  Check 'em out:
 
-  rake what_column:add #=> Adds column details to models
+    rake what_column:add #=> Adds column details to models
   
-  rake what_column:remove #=> Removes column details from models
+    rake what_column:remove #=> Removes column details from models
 
 
 Copyright (c) 2009 Chris O'Sullivan, released under the MIT license
