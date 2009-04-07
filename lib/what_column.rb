@@ -38,12 +38,12 @@ module WhatColumn
             read_lines.each do |line|
               output_lines << line
               if line.match(/class (.*)\</) and $1.strip.constantize == ar_class
-                output_lines << HEADER + "\n"
+                output_lines << "\n" + HEADER + "\n"
                 ar_class.columns.each do |column|
                   values = [column.name, column.type.to_s]
                   output_lines << format_string % values
                 end
-                output_lines << FOOTER + "\n"
+                output_lines << FOOTER + "\n\n"
 
               end
             end
@@ -61,13 +61,19 @@ module WhatColumn
       File.open(filepath, 'r+') do |file|
         lines = file.readlines
         removing_what_columns = false
-        out = ""
-        lines.each do |line|
+        out = []
+        lines.each_with_index do |line, index|
           if line.match(/^#{HEADER}$/)
             removing_what_columns = true
+            # And remove previous empty line
+            out.pop if out.last == "\n"
           end
 
-          out << line unless removing_what_columns
+
+          previous_line = index > 0 ? lines[index - 1] : ""
+          if !removing_what_columns and !(previous_line.match(/^#{FOOTER}$/) and line == "\n")
+            out << line
+          end
 
           if line.match(/^#{FOOTER}$/)
             removing_what_columns = false

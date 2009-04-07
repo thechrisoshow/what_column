@@ -78,6 +78,11 @@ class WhatColumnTest < ActiveSupport::TestCase
     should "justify the columns" do
       assert_match(/age        : integer/, @file.read)
     end
+    
+    should "add line feed before and after columns" do
+      number_of_empty_lines = @file.readlines.select {|line| line == "\n"}.size
+      assert_equal 2, number_of_empty_lines
+    end
 
   end
 
