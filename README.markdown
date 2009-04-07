@@ -20,12 +20,12 @@ Everytime you run migrations in development mode your models will be updated wit
 
     class User < ActiveRecord::Base
 
-    # === List of columns ===
-    #   id         : integer 
-    #   name       : string 
-    #   created_at : datetime 
-    #   updated_at : datetime 
-    # =======================
+      # === List of columns ===
+      #   id         : integer 
+      #   name       : string 
+      #   created_at : datetime 
+      #   updated_at : datetime 
+      # =======================
 
     end
 
