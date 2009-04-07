@@ -16,7 +16,7 @@ Go into your Rails folder and type:
 
 USAGE
 ------------
-Once what_column is installed everytime you run migrations in development mode your models will get a comment block plonked into all your models that details column information:
+Everytime you run migrations in development mode your models will be updated with a comment block detailing comment information:
 
     class User < ActiveRecord::Base
 
@@ -29,6 +29,7 @@ Once what_column is installed everytime you run migrations in development mode y
 
     end
 
+It only works for those models under app/models.  And as it writes directly to your model files make sure that you use source control!
 
 Should you wish to run the commands manually there are rake commands.  Check 'em out:
 
