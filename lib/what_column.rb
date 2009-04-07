@@ -3,6 +3,7 @@ module WhatColumn
 
     HEADER = "# === List of columns ==="
     FOOTER = "# ======================="
+    INCREMENT = "  "
 
     def add_column_details_to_models
       remove_column_details_from_models    
@@ -29,7 +30,7 @@ module WhatColumn
 
             max_width = ar_class.columns.map {|c| c.name.length + 1}.max
             # the format string is used to line up the column types correctly
-            format_string = "#   %-#{max_width}s: %s \n"
+            format_string = "#{INCREMENT}#   %-#{max_width}s: %s \n"
 
             file.rewind            
             read_lines = file.readlines
@@ -38,12 +39,12 @@ module WhatColumn
             read_lines.each do |line|
               output_lines << line
               if line.match(/class (.*)\</) and $1.strip.constantize == ar_class
-                output_lines << "\n" + HEADER + "\n"
+                output_lines << "\n" + INCREMENT + HEADER + "\n"
                 ar_class.columns.each do |column|
                   values = [column.name, column.type.to_s]
                   output_lines << format_string % values
                 end
-                output_lines << FOOTER + "\n\n"
+                output_lines << INCREMENT + FOOTER + "\n\n"
 
               end
             end
@@ -63,7 +64,7 @@ module WhatColumn
         removing_what_columns = false
         out = []
         lines.each_with_index do |line, index|
-          if line.match(/^#{HEADER}$/)
+          if line_has_header?(line)
             removing_what_columns = true
             # And remove previous empty line
             out.pop if out.last == "\n"
@@ -75,7 +76,7 @@ module WhatColumn
             out << line
           end
 
-          if line.match(/^#{FOOTER}$/)
+          if line_has_footer?(line)
             removing_what_columns = false
           end
 
@@ -87,7 +88,15 @@ module WhatColumn
     end
 
     def should_keep_line?(removing_what_columns, line, previous_line)
-      !((removing_what_columns and line.match(/^\s*#/)) or (previous_line.match(/^#{FOOTER}$/) and line == "\n"))
+      !((removing_what_columns and line.match(/^\s*#/)) or (line_has_footer?(previous_line) and line == "\n"))
+    end
+    
+    def line_has_header?(line)
+      line.match(/^\s*#{HEADER}\s*$/)
+    end
+      
+    def line_has_footer?(line)
+      line.match(/^\s*#{FOOTER}\s*$/)
     end
     
     def class_can_be_columnized?(class_to_check)
