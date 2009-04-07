@@ -127,7 +127,6 @@ class WhatColumnTest < ActiveSupport::TestCase
       assert_match(/quantity\s+: integer/, @file.read)
     end    
   end
-
   
   context "columnizing an inherited model" do
     setup do
@@ -137,6 +136,17 @@ class WhatColumnTest < ActiveSupport::TestCase
 
     should "have name column detailed" do
       assert_match(/name\s+: string/, @file.read)
+    end
+  end
+  
+  context "columnizing an abstract model" do
+    setup do
+      @file = open_file("abstract_user.rb")
+      @columnizer.add_column_details_to_models
+    end
+
+    should "not have any what column stuff" do
+      assert_no_match(/#{WhatColumn::Columnizer::FOOTER}/, @file.read)
     end
   end
   

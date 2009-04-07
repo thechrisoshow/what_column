@@ -25,7 +25,7 @@ module WhatColumn
         if file.read.match(/class (.*)\</)
           ar_class = $1.strip.constantize
 
-          if ar_class.respond_to?(:columns)
+          if class_can_be_columnized?(ar_class)
 
             max_width = ar_class.columns.map {|c| c.name.length + 1}.max
             # the format string is used to line up the column types correctly
@@ -71,7 +71,7 @@ module WhatColumn
 
 
           previous_line = index > 0 ? lines[index - 1] : ""
-          if should_keep_line(removing_what_columns, line, previous_line)
+          if should_keep_line?(removing_what_columns, line, previous_line)
             out << line
           end
 
@@ -86,8 +86,12 @@ module WhatColumn
       end
     end
 
-    def should_keep_line(removing_what_columns, line, previous_line)
+    def should_keep_line?(removing_what_columns, line, previous_line)
       !((removing_what_columns and line.match(/^\s*#/)) or (previous_line.match(/^#{FOOTER}$/) and line == "\n"))
+    end
+    
+    def class_can_be_columnized?(class_to_check)
+      class_to_check.respond_to?(:table_exists?) and class_to_check.table_exists? and class_to_check.respond_to?(:columns)
     end
 
   end
