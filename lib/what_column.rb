@@ -30,7 +30,7 @@ module WhatColumn
             max_width = ar_class.columns.map {|c| c.name.length + 1}.max
             # the format string is used to line up the column types correctly
             format_string = "#   %-#{max_width}s: %s \n"
-            
+
             file.rewind            
             read_lines = file.readlines
             output_lines = []
@@ -47,7 +47,7 @@ module WhatColumn
 
               end
             end
-            
+
             file.pos = 0
             file.print output_lines
             file.truncate(file.pos)
@@ -71,7 +71,7 @@ module WhatColumn
 
 
           previous_line = index > 0 ? lines[index - 1] : ""
-          if !should_remove_line(removing_what_columns, line, previous_line)
+          if should_keep_line(removing_what_columns, line, previous_line)
             out << line
           end
 
@@ -85,9 +85,9 @@ module WhatColumn
         file.truncate(file.pos)      
       end
     end
-    
-    def should_remove_line(removing_what_columns, line, previous_line)
-      (removing_what_columns and line.match(/^\s*#/)) or (previous_line.match(/^#{FOOTER}$/) and line == "\n")
+
+    def should_keep_line(removing_what_columns, line, previous_line)
+      !((removing_what_columns and line.match(/^\s*#/)) or (previous_line.match(/^#{FOOTER}$/) and line == "\n"))
     end
 
   end
