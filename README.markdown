@@ -21,10 +21,10 @@ Once what_column is installed everytime you run migrations in development mode y
     class User < ActiveRecord::Base
 
     # === List of columns ===
-    #   id: integer
-    #   name: string
-    #   created_at: datetime
-    #   updated_at: datetime
+    #   id         : integer 
+    #   name       : string 
+    #   created_at : datetime 
+    #   updated_at : datetime 
     # =======================
 
     end
