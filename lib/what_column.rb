@@ -6,7 +6,7 @@ module WhatColumn
     INCREMENT = "  "
 
     def add_column_details_to_models
-      remove_column_details_from_models    
+      remove_column_details_from_models
       Dir[File.join(RAILS_ROOT, 'app', 'models', '**', '*')].each do |dir|
         next if File.directory?(dir)
         add_column_details_to_file(dir)
@@ -15,7 +15,7 @@ module WhatColumn
 
     def remove_column_details_from_models
       Dir[File.join(RAILS_ROOT, 'app', 'models', '**', '*')].each do |dir|
-        next if File.directory?(dir)      
+        next if File.directory?(dir)
         remove_column_details_from_file(dir)
       end
     end
@@ -32,20 +32,22 @@ module WhatColumn
             # the format string is used to line up the column types correctly
             format_string = "#{INCREMENT}#   %-#{max_width}s: %s \n"
 
-            file.rewind            
+            file.rewind
             read_lines = file.readlines
             output_lines = []
             # find the lines that start with the appropriate class
             read_lines.each do |line|
               output_lines << line
-              if line.match(/class (.*)\</) and $1.strip.constantize == ar_class
-                output_lines << "\n" + INCREMENT + HEADER + "\n"
-                ar_class.columns.each do |column|
-                  values = [column.name, column.type.to_s]
-                  output_lines << format_string % values
+              if line.match(/class (.*)\</)
+                class_constant = $1.strip.constantize rescue nil
+                if class_constant == ar_class
+                  output_lines << "\n" + INCREMENT + HEADER + "\n"
+                  ar_class.columns.each do |column|
+                    values = [column.name, column.type.to_s]
+                    output_lines << format_string % values
+                  end
+                  output_lines << INCREMENT + FOOTER + "\n\n"
                 end
-                output_lines << INCREMENT + FOOTER + "\n\n"
-
               end
             end
 
@@ -80,25 +82,25 @@ module WhatColumn
             removing_what_columns = false
           end
 
-        end    
+        end
         file.pos = 0
         file.puts out
-        file.truncate(file.pos)      
+        file.truncate(file.pos)
       end
     end
 
     def should_keep_line?(removing_what_columns, line, previous_line)
       !((removing_what_columns and line.match(/^\s*#/)) or (line_has_footer?(previous_line) and line == "\n"))
     end
-    
+
     def line_has_header?(line)
       line.match(/^\s*#{HEADER}\s*$/)
     end
-      
+
     def line_has_footer?(line)
       line.match(/^\s*#{FOOTER}\s*$/)
     end
-    
+
     def class_can_be_columnized?(class_to_check)
       class_to_check.respond_to?(:table_exists?) and class_to_check.table_exists? and class_to_check.respond_to?(:columns)
     end
