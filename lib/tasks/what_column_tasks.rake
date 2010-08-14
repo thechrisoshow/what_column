@@ -1,4 +1,4 @@
-require File.join(RAILS_ROOT, "config", "environment")
+require Rails.root.join("config", "environment")
 
 namespace :what_column do
   desc "Add column detail comment block to your model files"
