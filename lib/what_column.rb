@@ -52,7 +52,7 @@ module WhatColumn
             end
 
             file.pos = 0
-            file.print output_lines
+            output_lines.each { |line| file.print line }
             file.truncate(file.pos)
 
           end
