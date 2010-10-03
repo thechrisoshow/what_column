@@ -7,14 +7,14 @@ module WhatColumn
 
     def add_column_details_to_models
       remove_column_details_from_models
-      Dir[File.join(RAILS_ROOT, 'app', 'models', '**', '*')].each do |dir|
+      Dir[File.join(Rails.root.to_s, 'app', 'models', '**', '*')].each do |dir|
         next if File.directory?(dir)
         add_column_details_to_file(dir)
       end
     end
 
     def remove_column_details_from_models
-      Dir[File.join(RAILS_ROOT, 'app', 'models', '**', '*')].each do |dir|
+      Dir[File.join(Rails.root.to_s, 'app', 'models', '**', '*')].each do |dir|
         next if File.directory?(dir)
         remove_column_details_from_file(dir)
       end

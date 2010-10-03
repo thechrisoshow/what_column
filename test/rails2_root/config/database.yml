@@ -1,7 +1,7 @@
 test:
   :adapter: sqlite3
-  :dbfile: ":memory:"
+  :database: ":memory:"
 
 development:
   :adapter: sqlite3
-  :dbfile: ":memory:"
+  :database: ":memory:"

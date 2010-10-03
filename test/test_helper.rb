@@ -1,23 +1,15 @@
-$:.unshift(File.dirname(__FILE__) + '/../lib')
+what_column_path = File.join(File.dirname(__FILE__), '..', 'lib')
+$LOAD_PATH << what_column_path
 
 require 'what_column'
 require 'what_column_migrator'
 
 # Load the environment
 ENV['RAILS_ENV'] ||= 'test'
+ENV['RAILS_VERSION'] ||= '2.3.8'
 
-rails_root = File.dirname(__FILE__) + '/rails_root'
-
-require "#{rails_root}/config/environment.rb"
-
-
-# Load the testing framework
-require 'test_help'
-
-# Run the migrations
-
-ActiveRecord::Migration.verbose = false
-ActiveRecord::Migrator.migrate("#{RAILS_ROOT}/db/migrate")
-
-
-require 'shoulda'
+if ENV['RAILS_VERSION'].to_s =~ /^2/
+  require 'test/rails2_test_helper'
+else
+  require 'test/rails3_test_helper'
+end

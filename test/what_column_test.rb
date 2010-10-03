@@ -7,7 +7,7 @@ class WhatColumnTest < ActiveSupport::TestCase
   end
 
   def open_file(name)
-    File.open(File.join(RAILS_ROOT, "app", "models", name))
+    File.open(File.join(rails_root, "app", "models", name))
   end
 
   context "before columnization" do
@@ -105,6 +105,7 @@ class WhatColumnTest < ActiveSupport::TestCase
     end
 
     should "have integer column detailed" do
+      debugger
       assert_match(/quantity\s+: integer/, @file.read)
     end    
   end
